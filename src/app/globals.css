@@ -112,9 +112,17 @@ body {
   overflow: hidden;
 }
 
+.main-panels.chat-hidden .chat-panel {
+  display: none;
+}
+
+.main-panels.chat-hidden .preview-panel {
+  flex: 1;
+}
+
 .chat-panel {
   width: var(--chat-width, 440px);
-  min-width: 280px;
+  min-width: 320px;
   max-width: 600px;
   display: flex;
   flex-direction: column;
@@ -155,6 +163,34 @@ body {
 .resizing {
   user-select: none !important;
   cursor: col-resize !important;
+}
+
+/* ─── Toggle Chat Button ─────────────────── */
+.toggle-chat-btn {
+  padding: 4px 10px;
+  background: var(--surface-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.toggle-chat-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.preview-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .preview-panel {
