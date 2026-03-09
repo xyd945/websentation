@@ -11,9 +11,11 @@ import { useRef, useCallback, useEffect, useState } from 'react';
 interface PreviewPanelProps {
     html: string | undefined;
     onRefresh?: () => void;
+    isChatVisible?: boolean;
+    onToggleChat?: () => void;
 }
 
-export default function PreviewPanel({ html, onRefresh }: PreviewPanelProps) {
+export default function PreviewPanel({ html, onRefresh, isChatVisible = true, onToggleChat }: PreviewPanelProps) {
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const [copied, setCopied] = useState(false);
 
@@ -72,6 +74,15 @@ export default function PreviewPanel({ html, onRefresh }: PreviewPanelProps) {
             <div className="preview-panel">
                 <div className="preview-toolbar">
                     <span className="preview-label">Preview</span>
+                    {onToggleChat && (
+                        <button
+                            className="toggle-chat-btn"
+                            onClick={onToggleChat}
+                            title={isChatVisible ? 'Hide chat panel' : 'Show chat panel'}
+                        >
+                            {isChatVisible ? '◀ Hide Chat' : '▶ Show Chat'}
+                        </button>
+                    )}
                 </div>
                 <div className="preview-empty">
                     <div className="preview-empty-icon">🎨</div>
@@ -88,7 +99,18 @@ export default function PreviewPanel({ html, onRefresh }: PreviewPanelProps) {
     return (
         <div className="preview-panel">
             <div className="preview-toolbar">
-                <span className="preview-label">Preview</span>
+                <div className="preview-toolbar-left">
+                    <span className="preview-label">Preview</span>
+                    {onToggleChat && (
+                        <button
+                            className="toggle-chat-btn"
+                            onClick={onToggleChat}
+                            title={isChatVisible ? 'Hide chat panel' : 'Show chat panel'}
+                        >
+                            {isChatVisible ? '◀ Hide Chat' : '▶ Show Chat'}
+                        </button>
+                    )}
+                </div>
                 <div className="preview-controls">
                     <button
                         className="preview-control-btn"

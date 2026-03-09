@@ -31,6 +31,8 @@ export default function Home() {
   const [selectedModel, setSelectedModel] = useState(0); // Index into MODELS
   const [showExport, setShowExport] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
+  const [chatWidth, setChatWidth] = useState(400); // Default chat panel width
+  const [isChatVisible, setIsChatVisible] = useState(true); // Chat panel visibility
 
   // ─── LLM request handler ─────────────────
   const sendLLMRequest = useCallback(
@@ -217,17 +219,25 @@ export default function Home() {
       </header>
 
       {/* ─── Main Content ───────────────────── */}
-      <div className="main-panels">
-        <ChatPanel
-          messages={state.messages}
-          inputValue={inputValue}
-          onInputChange={setInputValue}
-          onSend={handleSend}
-          onQuickReply={handleQuickReply}
-          isStreaming={state.isStreaming}
-          onUploadClick={() => setShowUpload(true)}
+      <div className={`main-panels ${!isChatVisible ? 'chat-hidden' : ''}`}>
+        {isChatVisible && (
+          <ChatPanel
+            messages={state.messages}
+            inputValue={inputValue}
+            onInputChange={setInputValue}
+            onSend={handleSend}
+            onQuickReply={handleQuickReply}
+            isStreaming={state.isStreaming}
+            onUploadClick={() => setShowUpload(true)}
+            width={chatWidth}
+            onWidthChange={setChatWidth}
+          />
+        )}
+        <PreviewPanel
+          html={state.project.html}
+          isChatVisible={isChatVisible}
+          onToggleChat={() => setIsChatVisible(!isChatVisible)}
         />
-        <PreviewPanel html={state.project.html} />
       </div>
 
       {/* ─── Modals ─────────────────────────── */}

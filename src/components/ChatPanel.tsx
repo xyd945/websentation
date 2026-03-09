@@ -3,9 +3,10 @@
 /* ===========================================
    CHAT PANEL
    Messages, quick replies, guided flow
+   Now with resizable width
    =========================================== */
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { ChatMessage, QuickReply } from '@/lib/types';
 
 interface ChatPanelProps {
@@ -16,6 +17,8 @@ interface ChatPanelProps {
     onQuickReply: (value: string) => void;
     isStreaming: boolean;
     onUploadClick: () => void;
+    width?: number;
+    onWidthChange?: (width: number) => void;
 }
 
 export default function ChatPanel({
@@ -26,14 +29,48 @@ export default function ChatPanel({
     onQuickReply,
     isStreaming,
     onUploadClick,
+    width = 400,
+    onWidthChange,
 }: ChatPanelProps) {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
+    const [isResizing, setIsResizing] = useState(false);
 
     // Auto-scroll to bottom
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
+
+    // Handle resize
+    const handleResizeStart = useCallback((e: React.MouseEvent) => {
+        e.preventDefault();
+        setIsResizing(true);
+        document.body.classList.add('resizing');
+    }, []);
+
+    useEffect(() => {
+        if (!isResizing) return;
+
+        const handleMouseMove = (e: MouseEvent) => {
+            if (!panelRef.current) return;
+            const newWidth = Math.max(280, Math.min(600, e.clientX));
+            onWidthChange?.(newWidth);
+        };
+
+        const handleMouseUp = () => {
+            setIsResizing(false);
+            document.body.classList.remove('resizing');
+        };
+
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+
+        return () => {
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [isResizing, onWidthChange]);
 
     // Handle Enter key
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -67,7 +104,18 @@ export default function ChatPanel({
     };
 
     return (
-        <div className="chat-panel">
+        <div
+            ref={panelRef}
+            className="chat-panel"
+            style={{ width: `${width}px`, minWidth: '280px', maxWidth: '600px' }}
+        >
+            {/* Resize Handle */}
+            <div
+                className={`resize-handle ${isResizing ? 'dragging' : ''}`}
+                onMouseDown={handleResizeStart}
+                title="Drag to resize"
+            />
+
             {/* Messages */}
             <div className="chat-messages">
                 {messages.map((msg) => (
@@ -75,7 +123,7 @@ export default function ChatPanel({
                         <div className={`message-avatar ${msg.role}`}>
                             {msg.role === 'assistant' ? '✦' : '⬤'}
                         </div>
-                        <div>
+                        <div className="message-content-wrapper">
                             <div className="message-bubble">
                                 {msg.isLoading ? (
                                     <div className="loading-dots">
