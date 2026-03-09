@@ -85,15 +85,38 @@ OPENAI_BASE_URL=https://api.openai.com/v1
 
 ### Available AI Models
 
-The app supports multiple LLM providers:
+The app supports any LLM provider that uses the **OpenAI standard API format**. Configure your preferred models in the `.env` file:
 
-| Provider | Models |
-|----------|--------|
-| **OpenAI** | GPT-4o, GPT-4o Mini |
-| **DeepSeek** | DeepSeek Chat |
-| **Kimi** | Moonshot-v1-128k |
+#### Configuration
 
-Select your preferred model from the dropdown in the header.
+Add your API keys to `.env`:
+
+```env
+# OpenAI-compatible providers
+OPENAI_API_KEY=your_key_here
+OPENAI_BASE_URL=https://api.openai.com/v1
+
+# Or other OpenAI-standard providers
+DEEPSEEK_API_KEY=your_key_here
+DEEPSEEK_BASE_URL=https://api.deepseek.com/v1
+
+KIMI_API_KEY=your_key_here
+KIMI_BASE_URL=https://api.moonshot.cn/v1
+```
+
+#### Supported Providers
+
+Any provider with OpenAI-compatible API:
+
+| Provider | Example Models | Base URL |
+|----------|----------------|----------|
+| **OpenAI** | GPT-4o, GPT-4o Mini | `https://api.openai.com/v1` |
+| **DeepSeek** | DeepSeek Chat | `https://api.deepseek.com/v1` |
+| **Kimi** | Moonshot-v1-128k | `https://api.moonshot.cn/v1` |
+| **Azure OpenAI** | GPT-4, GPT-3.5 | `https://{resource}.openai.azure.com/openai/deployments/{deployment}` |
+| **Local/Custom** | Any | Your custom endpoint |
+
+Select your configured model from the dropdown in the header.
 
 ## 🎨 Visual Styles Reference
 
