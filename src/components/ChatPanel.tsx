@@ -162,7 +162,7 @@ export default function ChatPanel({
             <div className="chat-input-area">
                 <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
                     <button className="upload-btn" onClick={onUploadClick}>
-                        📄 Upload PPTX
+                        📄 Upload File
                     </button>
                 </div>
                 <div className="chat-input-wrapper">
