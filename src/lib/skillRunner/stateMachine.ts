@@ -55,9 +55,9 @@ export function createInitialState(): SkillState {
                         description: 'Describe your presentation and I\'ll generate it',
                     },
                     {
-                        label: '📄 Convert PPTX',
+                        label: '📄 Upload File',
                         value: 'convert_pptx',
-                        description: 'Upload a PowerPoint file to convert to HTML',
+                        description: 'Upload a PPTX or PDF file to convert to HTML',
                     },
                 ],
             },
@@ -126,10 +126,10 @@ async function handleIdle(state: SkillState, input: string, sendLLMRequest: (mes
         return state;
     }
 
-    if (input === 'convert_pptx' || input.toLowerCase().includes('pptx') || input.toLowerCase().includes('powerpoint') || input.toLowerCase().includes('convert')) {
+    if (input === 'convert_pptx' || input.toLowerCase().includes('pptx') || input.toLowerCase().includes('powerpoint') || input.toLowerCase().includes('convert') || input.toLowerCase().includes('pdf') || input.toLowerCase().includes('upload')) {
         state.project.mode = 'pptx';
         state.phase = 'content_discovery';
-        addAssistantMessage(state, 'Upload your PPTX file using the upload button above the chat. I\'ll extract the content and help you restyle it into a beautiful HTML presentation.');
+        addAssistantMessage(state, 'Upload your file using the upload button above the chat. I support **.pptx** and **.pdf** files. I\'ll extract the content and help you restyle it into a beautiful HTML presentation.');
         return state;
     }
 
@@ -379,7 +379,14 @@ async function handleStyleDiscovery(
         return generateDeck(state, sendLLMRequest);
     }
 
-    addAssistantMessage(state, 'Please select a style from the options above, or type a preset name.');
+    addAssistantMessage(
+        state,
+        'Now let\'s pick a style! How would you like to choose?',
+        [
+            { label: '🎨 Show me options', value: 'show_options', description: 'Generate previews based on your vibe' },
+            { label: '📋 I know what I want', value: 'pick_direct', description: 'Choose from the preset list' },
+        ]
+    );
     return state;
 }
 

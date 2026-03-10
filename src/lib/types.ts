@@ -36,7 +36,7 @@ export type Preset = {
 };
 
 // ─── Project ─────────────────────────────────
-export type ProjectMode = 'prompt' | 'pptx';
+export type ProjectMode = 'prompt' | 'pptx' | 'pdf';
 export type Purpose = 'pitch' | 'teaching' | 'talk' | 'internal';
 export type DeckLength = 'short' | 'medium' | 'long';
 export type ContentReadiness = 'ready' | 'notes' | 'topic';
@@ -54,6 +54,10 @@ export type Project = {
     inlineEditing?: boolean;
   };
   pptx?: {
+    filename: string;
+    extracted: ExtractedDeck;
+  };
+  pdf?: {
     filename: string;
     extracted: ExtractedDeck;
   };

@@ -141,10 +141,13 @@ export default function Home() {
     [state, sendLLMRequest, showLoading]
   );
 
-  // ─── PPTX extraction callback ────────────
+  // ─── File extraction callback ─────────────
   const handlePptxExtracted = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async (data: any) => {
+      const fileType = data.fileType || 'pptx';
+      const formatLabel = fileType === 'pdf' ? 'PDF' : 'PPTX';
+
       const slidesSummary = data.slides
         .map(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -153,15 +156,17 @@ export default function Home() {
         )
         .join('\n');
 
-      const extractedMsg = `Extracted ${data.slides.length} slides from your PPTX:\n\n${slidesSummary}${data.warnings?.length ? '\n\n⚠️ Warnings:\n' + data.warnings.join('\n') : ''}`;
+      const extractedMsg = `Extracted ${data.slides.length} slides from your ${formatLabel}:\n\n${slidesSummary}${data.warnings?.length ? '\n\n⚠️ Warnings:\n' + data.warnings.join('\n') : ''}`;
+
+      const mode = fileType === 'pdf' ? 'pdf' : 'pptx';
 
       setState((prev) => ({
         ...prev,
         project: {
           ...prev.project,
-          mode: 'pptx',
-          pptx: {
-            filename: 'uploaded.pptx',
+          mode,
+          [mode]: {
+            filename: `uploaded.${fileType}`,
             extracted: data,
           },
         },
@@ -174,8 +179,8 @@ export default function Home() {
           phase: 'style_discovery',
           project: {
             ...state.project,
-            mode: 'pptx',
-            pptx: { filename: 'uploaded.pptx', extracted: data },
+            mode,
+            [mode]: { filename: `uploaded.${fileType}`, extracted: data },
           },
         },
         extractedMsg,

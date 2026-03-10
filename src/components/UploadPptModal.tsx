@@ -1,8 +1,9 @@
 'use client';
 
 /* ===========================================
-   UPLOAD PPTX MODAL
+   UPLOAD FILE MODAL
    Drag/drop zone, extraction progress
+   Supports .pptx and .pdf files
    =========================================== */
 
 import { useState, useRef, useCallback } from 'react';
@@ -39,8 +40,8 @@ export default function UploadPptModal({
 
     const handleFile = useCallback(
         async (file: File) => {
-            if (!file.name.endsWith('.pptx')) {
-                setError('Only .pptx files are supported');
+            if (!file.name.endsWith('.pptx') && !file.name.endsWith('.pdf')) {
+                setError('Only .pptx and .pdf files are supported');
                 return;
             }
 
@@ -59,7 +60,7 @@ export default function UploadPptModal({
 
                 setProgress(50);
 
-                const response = await fetch('/api/pptx/extract', {
+                const response = await fetch('/api/upload/extract', {
                     method: 'POST',
                     body: formData,
                 });
@@ -130,14 +131,14 @@ export default function UploadPptModal({
                         onClick={handleClick}
                     >
                         <div className="upload-dropzone-icon">📎</div>
-                        <h4>Drop your .pptx file here</h4>
+                        <h4>Drop your .pptx or .pdf file here</h4>
                         <p>or click to browse (max 50MB)</p>
                     </div>
 
                     <input
                         ref={fileInputRef}
                         type="file"
-                        accept=".pptx"
+                        accept=".pptx,.pdf"
                         onChange={handleFileInput}
                         style={{ display: 'none' }}
                     />
