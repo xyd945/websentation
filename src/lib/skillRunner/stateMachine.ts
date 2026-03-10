@@ -379,7 +379,14 @@ async function handleStyleDiscovery(
         return generateDeck(state, sendLLMRequest);
     }
 
-    addAssistantMessage(state, 'Please select a style from the options above, or type a preset name.');
+    addAssistantMessage(
+        state,
+        'Now let\'s pick a style! How would you like to choose?',
+        [
+            { label: '🎨 Show me options', value: 'show_options', description: 'Generate previews based on your vibe' },
+            { label: '📋 I know what I want', value: 'pick_direct', description: 'Choose from the preset list' },
+        ]
+    );
     return state;
 }
 
