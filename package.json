@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.9.0",
+    "@supabase/supabase-js": "^2.98.0",
     "fflate": "^0.8.2",
     "jszip": "^3.10.1",
     "next": "16.1.6",
